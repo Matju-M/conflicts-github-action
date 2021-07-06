@@ -23,6 +23,9 @@ const getPullRequestPages = async (
           node {
             id
             number
+            author {
+              login
+            }
             mergeable
             potentialMergeCommit {
               oid 
@@ -81,6 +84,9 @@ export const getPullRequest = async (
       pullRequest(number: $number) {
         id
         number
+        author {
+          login
+        }
         mergeable
         potentialMergeCommit {
           oid

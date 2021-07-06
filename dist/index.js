@@ -250,6 +250,9 @@ const getPullRequestPages = (octokit, context, cursor) => __awaiter(void 0, void
           node {
             id
             number
+            author {
+              login
+            }
             mergeable
             potentialMergeCommit {
               oid 
@@ -293,6 +296,9 @@ const getPullRequest = (octokit, context, number) => __awaiter(void 0, void 0, v
       pullRequest(number: $number) {
         id
         number
+        author {
+          login
+        }
         mergeable
         potentialMergeCommit {
           oid
