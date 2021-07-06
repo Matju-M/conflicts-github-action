@@ -155,14 +155,11 @@ export const addLabelToLabelable = async (
     }
   `
 
-  console.log('context.repo:::', context.repo)
-  console.log('context.issue:::', context.issue)
-  console.log('pullRequestNumber:::', pullRequestNumber)
-  console.log('webhook:::', slackWebhookUrl)
+  const {owner, repo} = context.repo
 
   await axios.post(slackWebhookUrl, {
     channel: '#github-debug-conflicts',
-    text: "There's a conflict on <https://alert-system.com/alerts/1234%7CThis Pull Request>. If you are the author, please fix it.",
+    text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request>. If you are the author, please fix it.`,
     username: 'PR Conflicts Bot',
     // eslint-disable-next-line camelcase
     icon_emoji: ':warning:'
