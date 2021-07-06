@@ -344,7 +344,7 @@ const addLabelToLabelable = (octokit, { labelId, labelableId }, pullRequestNumbe
     const { owner, repo } = context.repo;
     yield axios_1.default.post(slackWebhookUrl, {
         channel: slackWebhookChannel,
-        text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request>. If you are the author, please fix it.`,
+        text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). If you are the author, please fix it.`,
         username: 'PR Conflicts Bot',
         // eslint-disable-next-line camelcase
         icon_emoji: ':warning:'

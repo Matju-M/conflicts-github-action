@@ -160,7 +160,7 @@ export const addLabelToLabelable = async (
 
   await axios.post(slackWebhookUrl, {
     channel: slackWebhookChannel,
-    text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request>. If you are the author, please fix it.`,
+    text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). If you are the author, please fix it.`,
     username: 'PR Conflicts Bot',
     // eslint-disable-next-line camelcase
     icon_emoji: ':warning:'
