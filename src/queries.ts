@@ -1,3 +1,5 @@
+import axios from 'axios'
+import * as core from '@actions/core'
 import {Context} from '@actions/github/lib/context'
 import {GitHub} from '@actions/github/lib/utils'
 import {
@@ -135,8 +137,12 @@ export const addLabelToLabelable = async (
   }: {
     labelId: string
     labelableId: string
-  }
+  },
+  pullRequestNumber: number,
+  context: Context
 ) => {
+  const slackWebhookUrl = core.getInput('slack_webhook_url', {required: true})
+
   const query = `mutation ($label: String!, $pullRequest: String!) {
     addLabelsToLabelable(input: {labelIds: [$label], labelableId: $pullRequest}) {
       clientMutationId
@@ -148,6 +154,19 @@ export const addLabelToLabelable = async (
       }
     }
   `
+
+  console.log('context.repo:::', context.repo)
+  console.log('context.issue:::', context.issue)
+  console.log('pullRequestNumber:::', pullRequestNumber)
+  console.log('webhook:::', slackWebhookUrl)
+
+  await axios.post(slackWebhookUrl, {
+    channel: '#github-debug-conflicts',
+    text: "There's a conflict on <https://alert-system.com/alerts/1234%7CThis Pull Request>. If you are the author, please fix it.",
+    username: 'PR Conflicts Bot',
+    // eslint-disable-next-line camelcase
+    icon_emoji: ':warning:'
+  })
 
   await octokit.graphql(query, {label: labelId, pullRequest: labelableId})
 

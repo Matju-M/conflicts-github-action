@@ -30,7 +30,8 @@
   "dependencies": {
     "@actions/core": "^1.4.0",
     "@actions/github": "^5.0.0",
-    "@octokit/webhooks-definitions": "^3.67.3"
+    "@octokit/webhooks-definitions": "^3.67.3",
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
