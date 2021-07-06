@@ -17,6 +17,7 @@ async function applyLabelable(
   labelable: Labelable,
   hasLabel: boolean,
   pullRequestNumber: number,
+  pullRequestAuthor: string,
   context: Context
 ) {
   if (hasLabel) {
@@ -25,7 +26,7 @@ async function applyLabelable(
   }
 
   core.info(`Labeling #${pullRequestNumber}...`)
-  await addLabelToLabelable(octokit, labelable, pullRequestNumber, context)
+  await addLabelToLabelable(octokit, labelable, pullRequestNumber, pullRequestAuthor, context)
 }
 
 export async function updatePullRequestConflictLabel(
@@ -40,12 +41,12 @@ export async function updatePullRequestConflictLabel(
 
   switch (pullRequest.mergeable) {
     case 'CONFLICTING':
-      await applyLabelable(octokit, labelable, hasLabel, pullRequest.number, context)
+      await applyLabelable(octokit, labelable, hasLabel, pullRequest.number, pullRequest?.author?.login, context)
       break
 
     case 'MERGEABLE':
       if (detectMergeChanges && (await checkPullRequestForMergeChanges(octokit, context, pullRequest))) {
-        await applyLabelable(octokit, labelable, hasLabel, pullRequest.number, context)
+        await applyLabelable(octokit, labelable, hasLabel, pullRequest.number, pullRequest?.author?.login, context)
         break
       }
 
