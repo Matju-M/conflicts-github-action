@@ -164,10 +164,14 @@ export const addLabelToLabelable = async (
   `
 
   const {owner, repo} = context.repo
+  const message =
+    pullRequestAuthor === 'githubsys'
+      ? `There's a *backmerge* conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). Please fix it before it lands on the release mgmt process.`
+      : `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). If you are the author (@${pullRequestAuthor}), please fix it.`
 
   await axios.post(slackWebhookUrl, {
     channel: slackWebhookChannel,
-    text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). If you are the author (${pullRequestAuthor}), please fix it.`,
+    text: message,
     username: 'PR Conflicts Bot',
     // eslint-disable-next-line camelcase
     icon_emoji: ':warning:'
