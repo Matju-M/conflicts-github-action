@@ -41,27 +41,28 @@ const core = __importStar(__nccwpck_require__(2186));
 const pulls_1 = __nccwpck_require__(1316);
 const queries_1 = __nccwpck_require__(775);
 const util_1 = __nccwpck_require__(4024);
-function applyLabelable(octokit, labelable, hasLabel, pullRequestNumber, context) {
+function applyLabelable(octokit, labelable, hasLabel, pullRequestNumber, pullRequestAuthor, context) {
     return __awaiter(this, void 0, void 0, function* () {
         if (hasLabel) {
             core.debug(`Skipping #${pullRequestNumber}, it is already labeled`);
             return;
         }
         core.info(`Labeling #${pullRequestNumber}...`);
-        yield queries_1.addLabelToLabelable(octokit, labelable, pullRequestNumber, context);
+        yield queries_1.addLabelToLabelable(octokit, labelable, pullRequestNumber, pullRequestAuthor, context);
     });
 }
 function updatePullRequestConflictLabel(octokit, context, pullRequest, conflictLabel, detectMergeChanges) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const hasLabel = util_1.isAlreadyLabeled(pullRequest, conflictLabel);
         const labelable = { labelId: conflictLabel.node.id, labelableId: pullRequest.id };
         switch (pullRequest.mergeable) {
             case 'CONFLICTING':
-                yield applyLabelable(octokit, labelable, hasLabel, pullRequest.number, context);
+                yield applyLabelable(octokit, labelable, hasLabel, pullRequest.number, (_a = pullRequest === null || pullRequest === void 0 ? void 0 : pullRequest.author) === null || _a === void 0 ? void 0 : _a.login, context);
                 break;
             case 'MERGEABLE':
                 if (detectMergeChanges && (yield pulls_1.checkPullRequestForMergeChanges(octokit, context, pullRequest))) {
-                    yield applyLabelable(octokit, labelable, hasLabel, pullRequest.number, context);
+                    yield applyLabelable(octokit, labelable, hasLabel, pullRequest.number, (_b = pullRequest === null || pullRequest === void 0 ? void 0 : pullRequest.author) === null || _b === void 0 ? void 0 : _b.login, context);
                     break;
                 }
                 if (hasLabel) {
@@ -327,7 +328,7 @@ const getLabels = (octokit, context, labelName) => __awaiter(void 0, void 0, voi
     return octokit.graphql(query, Object.assign(Object.assign({}, context.repo), { labelName }));
 });
 exports.getLabels = getLabels;
-const addLabelToLabelable = (octokit, { labelId, labelableId }, pullRequestNumber, context) => __awaiter(void 0, void 0, void 0, function* () {
+const addLabelToLabelable = (octokit, { labelId, labelableId }, pullRequestNumber, pullRequestAuthor, context) => __awaiter(void 0, void 0, void 0, function* () {
     const slackWebhookUrl = core.getInput('slack_webhook_url', { required: true });
     const slackWebhookChannel = core.getInput('slack_webhook_channel', { required: true });
     const query = `mutation ($label: String!, $pullRequest: String!) {
@@ -344,7 +345,7 @@ const addLabelToLabelable = (octokit, { labelId, labelableId }, pullRequestNumbe
     const { owner, repo } = context.repo;
     yield axios_1.default.post(slackWebhookUrl, {
         channel: slackWebhookChannel,
-        text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). If you are the author, please fix it.`,
+        text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). If you are the author (${pullRequestAuthor}), please fix it.`,
         username: 'PR Conflicts Bot',
         // eslint-disable-next-line camelcase
         icon_emoji: ':warning:'
