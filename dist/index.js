@@ -329,6 +329,7 @@ const getLabels = (octokit, context, labelName) => __awaiter(void 0, void 0, voi
 exports.getLabels = getLabels;
 const addLabelToLabelable = (octokit, { labelId, labelableId }, pullRequestNumber, context) => __awaiter(void 0, void 0, void 0, function* () {
     const slackWebhookUrl = core.getInput('slack_webhook_url', { required: true });
+    const slackWebhookChannel = core.getInput('slack_webhook_channel', { required: true });
     const query = `mutation ($label: String!, $pullRequest: String!) {
     addLabelsToLabelable(input: {labelIds: [$label], labelableId: $pullRequest}) {
       clientMutationId
@@ -342,7 +343,7 @@ const addLabelToLabelable = (octokit, { labelId, labelableId }, pullRequestNumbe
   `;
     const { owner, repo } = context.repo;
     yield axios_1.default.post(slackWebhookUrl, {
-        channel: '#github-debug-conflicts',
+        channel: slackWebhookChannel,
         text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request>. If you are the author, please fix it.`,
         username: 'PR Conflicts Bot',
         // eslint-disable-next-line camelcase

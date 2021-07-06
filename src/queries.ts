@@ -142,6 +142,7 @@ export const addLabelToLabelable = async (
   context: Context
 ) => {
   const slackWebhookUrl = core.getInput('slack_webhook_url', {required: true})
+  const slackWebhookChannel = core.getInput('slack_webhook_channel', {required: true})
 
   const query = `mutation ($label: String!, $pullRequest: String!) {
     addLabelsToLabelable(input: {labelIds: [$label], labelableId: $pullRequest}) {
@@ -158,7 +159,7 @@ export const addLabelToLabelable = async (
   const {owner, repo} = context.repo
 
   await axios.post(slackWebhookUrl, {
-    channel: '#github-debug-conflicts',
+    channel: slackWebhookChannel,
     text: `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request>. If you are the author, please fix it.`,
     username: 'PR Conflicts Bot',
     // eslint-disable-next-line camelcase
