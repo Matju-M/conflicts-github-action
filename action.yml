@@ -26,6 +26,7 @@ inputs:
   slack_webhook_channel:
     description: "the slack channel to output the message"
     required: true
+    default: "#release-management"
   slack_webhook_url:
     description: "slack webhook url"
     required: true
