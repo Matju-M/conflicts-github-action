@@ -338,10 +338,10 @@ const addLabelToLabelable = (octokit, { labelId, labelableId }, pullRequestNumbe
     const slackWebhookUrl = core.getInput('slack_webhook_url', { required: true });
     const slackWebhookChannel = core.getInput('slack_webhook_channel', { required: true });
     const { owner, repo } = context.repo;
-    const slackMessage = pullRequestAuthor === 'githubsys'
+    const slackMessage = pullRequestAuthor === 'githubys'
         ? `There's a *backmerge* conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). Please fix it before it lands on the release mgmt process.`
         : `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). If you are the author (@${pullRequestAuthor}), please fix it.`;
-    const pullMessage = pullRequestAuthor === 'githubsys'
+    const pullMessage = pullRequestAuthor === 'githubys'
         ? `:warning: There is a backmerge conflict on this PR. Please fix it before it lands on the release mgmt process.`
         : `:warning: There is a conflict on this PR. @${pullRequestAuthor} as you are the author, please fix it.`;
     const query = `mutation ($label: String!, $pullRequest: String!) {
