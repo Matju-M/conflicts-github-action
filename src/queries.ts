@@ -150,6 +150,15 @@ export const addLabelToLabelable = async (
 ) => {
   const slackWebhookUrl = core.getInput('slack_webhook_url', {required: true})
   const slackWebhookChannel = core.getInput('slack_webhook_channel', {required: true})
+  const {owner, repo} = context.repo
+  const slackMessage =
+    pullRequestAuthor === 'githubsys'
+      ? `There's a *backmerge* conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). Please fix it before it lands on the release mgmt process.`
+      : `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). If you are the author (@${pullRequestAuthor}), please fix it.`
+  const pullMessage =
+    pullRequestAuthor === 'githubsys'
+      ? `:warning: There is a backmerge conflict on this PR. Please fix it before it lands on the release mgmt process.`
+      : `:warning: There is a conflict on this PR. @${pullRequestAuthor} as you are the author, please fix it.`
 
   const query = `mutation ($label: String!, $pullRequest: String!) {
     addLabelsToLabelable(input: {labelIds: [$label], labelableId: $pullRequest}) {
@@ -163,15 +172,9 @@ export const addLabelToLabelable = async (
     }
   `
 
-  const {owner, repo} = context.repo
-  const message =
-    pullRequestAuthor === 'githubsys'
-      ? `There's a *backmerge* conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). Please fix it before it lands on the release mgmt process.`
-      : `There's a conflict on <https://github.com/${owner}/${repo}/pull/${pullRequestNumber}|This Pull Request> (${repo}). If you are the author (@${pullRequestAuthor}), please fix it.`
-
   await axios.post(slackWebhookUrl, {
     channel: slackWebhookChannel,
-    text: message,
+    text: slackMessage,
     username: 'PR Conflicts Bot',
     // eslint-disable-next-line camelcase
     icon_emoji: ':warning:'
@@ -181,7 +184,7 @@ export const addLabelToLabelable = async (
 
   return octokit.graphql(addComment, {
     id: labelableId,
-    body: ':warning: There is a conflict on this PR. If you are the author, please solve it.'
+    body: pullMessage
   })
 }
 
