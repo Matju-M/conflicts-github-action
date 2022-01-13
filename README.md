@@ -20,7 +20,7 @@ Add a [Slack Income Webhook token](https://api.slack.com/messaging/webhooks) as 
 
 > Workflow file
 
-Make sure to create a .yml config file under `.github/workflows` with the following structure
+Make sure to create a conflicts.yml config file under `.github/workflows` with the following structure
 
 ```
 name: Auto Label Conflicts
