@@ -10,7 +10,7 @@ Create a label called `conflict` on the repository - you can pick any color for 
 
 Set up a personal access token (just in case this is not already created). 
 
-Note that you need to have the correct admin permissions for the repository so that the token you create (which is associated with your account) can back-merge without requiring PR approval. You can give this token all permissions except for Delete Repository. See the GitHub docs here to create a personal access token: [Creating a personal access token - GitHub Docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+Note that you need to have the correct admin permissions for the repository so that the token you create (which is associated with your account). You can give this token all permissions except for Delete Repository. See the GitHub docs here to create a personal access token: [Creating a personal access token - GitHub Docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 > Secrets
 
