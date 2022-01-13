@@ -4,7 +4,7 @@
 
 > Label
 
-Create a label called conflict on the repository - you can pick any color for it
+Create a label called `conflict` on the repository - you can pick any color for it
 
 > Github access token
 
