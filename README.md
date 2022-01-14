@@ -1,5 +1,7 @@
 # Label Pull Requests with Merge Conflicts Automatically
 
+Originally a fork from [this action](https://github.com/prince-chrismc/label-merge-conflicts-action)
+
 ## Setup
 
 > Label
