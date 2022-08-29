@@ -369,7 +369,7 @@ const addLabelToLabelable = (octokit, { labelId, labelableId }, pullRequestNumbe
 });
 exports.addLabelToLabelable = addLabelToLabelable;
 const removeLabelFromLabelable = (octokit, { labelId, labelableId }) => __awaiter(void 0, void 0, void 0, function* () {
-    const query = `mutation ($label: String!, $pullRequest: String!) {
+    const query = `mutation ($label: ID!, $pullRequest: ID!) {
     removeLabelsFromLabelable(input: {labelIds: [$label], labelableId: $pullRequest}) {
       clientMutationId
     }

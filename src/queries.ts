@@ -198,7 +198,7 @@ export const removeLabelFromLabelable = async (
     labelableId: string
   }
 ) => {
-  const query = `mutation ($label: String!, $pullRequest: String!) {
+  const query = `mutation ($label: ID!, $pullRequest: ID!) {
     removeLabelsFromLabelable(input: {labelIds: [$label], labelableId: $pullRequest}) {
       clientMutationId
     }
